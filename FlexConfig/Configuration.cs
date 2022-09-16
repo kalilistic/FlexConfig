@@ -8,9 +8,9 @@ using Newtonsoft.Json;
 namespace FlexConfig;
 
 /// <summary>
-/// Configuration alternative to Dalamud's built in-class.
+/// Configuration class.
 /// </summary>
-public class Configuration
+public class Configuration : IConfiguration
 {
     private readonly string configFilePath;
 
@@ -27,7 +27,7 @@ public class Configuration
     /// </summary>
     /// <param name="configFilePath">Path to config file (including name).</param>
     /// <param name="autoSave">
-    /// Whether or not automatic save should happen with every call to <see cref="Set{T}(string,FlexConfig.Flex{T})"/>.
+    /// Whether or not automatic save should happen with every call to <see cref="Set{T}"/>.
     /// Default: true.
     /// </param>
     public Configuration(string configFilePath, bool autoSave = true)
@@ -41,15 +41,10 @@ public class Configuration
         this.configFilePath = configFilePath;
     }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether automatic saving is enabled.
-    /// </summary>
+    /// <inheritdoc/>
     public bool AutoSave { get; set; }
 
-    /// <summary>
-    /// Indexer operator for storing or retrieving instance of <see cref="IFlex"/>.
-    /// </summary>
-    /// <param name="key">Configuration key.</param>
+    /// <inheritdoc/>
     public IFlex this[string key]
     {
         get => !this.dictionary.TryGetValue(key, out var value) ? default! : value;
@@ -72,20 +67,10 @@ public class Configuration
         }
     }
 
-    /// <summary>
-    /// Gets an instance of <see cref="Flex{T}"/> by key.
-    /// </summary>
-    /// <param name="key">Configuration key.</param>
-    /// <typeparam name="T">Requested type.</typeparam>
-    /// <returns>Existing or default constructed instance of <see cref="Flex{T}"/> from dictionary.</returns>
+    /// <inheritdoc/>
     public Flex<T> Get<T>(string key) => !this.dictionary.TryGetValue(key, out var value) ? default! : (Flex<T>)value;
 
-    /// <summary>
-    /// Sets the value in the dictionary by key.
-    /// </summary>
-    /// <param name="key">Configuration key.</param>
-    /// <param name="value">Value to be stored.</param>
-    /// <typeparam name="T">Requested type (Can be implicit).</typeparam>
+    /// <inheritdoc/>
     public void Set<T>(string key, T value)
     {
         if (this.dictionary.ContainsKey(key) && this.dictionary[key].Type == typeof(T))
@@ -99,17 +84,13 @@ public class Configuration
         }
     }
 
-    /// <summary>
-    /// Serializes configuration dictionary to provided file path.
-    /// </summary>
+    /// <inheritdoc/>
     public void Save()
     {
         File.WriteAllText(this.configFilePath, this.SerializeConfig());
     }
 
-    /// <summary>
-    /// Deserializes configuration dictionary from provided file path.
-    /// </summary>
+    /// <inheritdoc/>
     public void Load()
     {
         FileInfo config = new (this.configFilePath);
