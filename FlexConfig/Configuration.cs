@@ -85,6 +85,11 @@ public class Configuration : IConfiguration
             var refInstance = Activator.CreateInstance(typeof(Flex<>).MakeGenericType(typeof(T)), value);
             this.dictionary[key] = (IFlex)refInstance!;
         }
+
+        if (this.AutoSave)
+        {
+            this.Save();
+        }
     }
 
     /// <inheritdoc/>
