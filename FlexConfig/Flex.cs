@@ -5,6 +5,7 @@
 using System;
 
 using FlexConfig.Interfaces;
+using Newtonsoft.Json;
 
 namespace FlexConfig;
 
@@ -32,11 +33,13 @@ public sealed class Flex<T> : IFlex
     /// Gets a reference to the stored value.
     /// </summary>
     /// <returns>A reference to <see cref="Value"/>.</returns>
+    [JsonIgnore]
     public ref T Reference => ref this.storedValue!;
 
     /// <summary>
     /// Gets the type of <see cref="Flex{T}"/> property.
     /// </summary>
+    [JsonIgnore]
     public Type Type => typeof(T);
 
     /// <inheritdoc />
