@@ -53,7 +53,7 @@ public sealed class Flex<T> : IFlex
                 throw new Exception($"{value.GetType()} does not match {typeof(T)}.");
             }
 
-            this.storedValue = value;
+            this.storedValue = (T)value;
         }
     }
 
