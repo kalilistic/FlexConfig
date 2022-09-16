@@ -1,4 +1,4 @@
-﻿namespace FlexConfig.Configuration;
+﻿namespace FlexConfig.Interfaces;
 
 /// <summary>
 /// Configuration alternative to Dalamud's built in-class.
