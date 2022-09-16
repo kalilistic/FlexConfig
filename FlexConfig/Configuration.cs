@@ -71,6 +71,9 @@ public class Configuration : IConfiguration
     public Flex<T> Get<T>(string key) => !this.dictionary.TryGetValue(key, out var value) ? default! : (Flex<T>)value;
 
     /// <inheritdoc/>
+    public void Set<T>(string key) => this.Set<T>(key, default!);
+
+    /// <inheritdoc/>
     public void Set<T>(string key, T value)
     {
         if (this.dictionary.ContainsKey(key) && this.dictionary[key].Type == typeof(T))

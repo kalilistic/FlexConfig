@@ -25,6 +25,13 @@ public interface IConfiguration
     Flex<T> Get<T>(string key);
 
     /// <summary>
+    /// Sets the value in the dictionary by key to a default state.
+    /// </summary>
+    /// <param name="key">Configuration key.</param>
+    /// <typeparam name="T">Requested type (Can be implicit).</typeparam>
+    void Set<T>(string key);
+
+    /// <summary>
     /// Sets the value in the dictionary by key.
     /// </summary>
     /// <param name="key">Configuration key.</param>
