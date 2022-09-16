@@ -33,19 +33,38 @@ namespace FlexConfig.Test
         }
 
         [Fact]
-        public void GetShouldRetrieveValue()
+        public void GetShouldRetrievePrimitiveValue()
         {
-            var c = new Configuration(TestFilePath);
-            c.Set<bool>("Enabled", false);
-            var t = c.Get<bool>("Enabled");
-            Test(ref t.Reference);
-            c["Enabled"] = t;
-            Assert.True(c.Get<bool>("Enabled"));
+            const string key = "isEnabled";
+            var config = new Configuration(TestFilePath);
+            config.Set(key, false);
+            var flex = config.Get<bool>(key);
+            ref var flexRef = ref flex.Reference;
+            flexRef = !flexRef;
+            config[key] = flex;
+            Assert.True(config.Get<bool>(key));
         }
 
-        private static void Test(ref bool val)
+        [Fact]
+        public void GetShouldRetrieveUserDefinedObjectValue()
         {
-            val = true;
+            const string key = "myObject";
+            var obj = new UserDefinedObject
+            {
+                Name = "Hello!",
+            };
+            var config = new Configuration(TestFilePath);
+            config.Set(key, obj);
+            var flex = config.Get<UserDefinedObject>(key);
+            ref var flexRef = ref flex.Reference;
+            flexRef.Name = "Goodbye!";
+            config[key] = flex;
+            Assert.Equal("Goodbye!", config.Get<UserDefinedObject>(key).Reference.Name);
+        }
+
+        private class UserDefinedObject
+        {
+            public string Name { get; set; } = null!;
         }
     }
 }
