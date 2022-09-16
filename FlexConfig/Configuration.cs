@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 
+using FlexConfig.Interfaces;
 using Newtonsoft.Json;
 
-namespace FlexConfig.Configuration;
+namespace FlexConfig;
 
 /// <summary>
 /// Configuration alternative to Dalamud's built in-class.
@@ -19,7 +20,7 @@ public class Configuration
         TypeNameHandling = TypeNameHandling.Objects,
     };
 
-    public Dictionary<string, IRef> Dictionary = new ();
+    private Dictionary<string, IFlex> dictionary = new ();
 
     public Configuration(string configFilePath, bool autoSave = true)
     {
@@ -34,21 +35,54 @@ public class Configuration
 
     public bool AutoSave { get; set; }
 
-    // public T Get<T>(string key) where T : class
-    // {
-    //     if (!this.dictionary.TryGetValue(key, out var value)) return default!;
-    //     return (T)value;
-    // }
-    //
-    // public void Set(string key, IRef value)
-    // {
-    //     if (this.dictionary.ContainsKey(key)) this.dictionary.Remove(key);
-    //     this.dictionary.Add(key, value);
-    //     if (this.AutoSave)
-    //     {
-    //         this.Save();
-    //     }
-    // }
+    public Flex<T> Get<T>(string key) => !this.dictionary.TryGetValue(key, out var value) ? default! : (Flex<T>)value;
+
+    public void Set<T>(string key, Flex<T> value)
+    {
+        if (this.dictionary.ContainsKey(key) && this.dictionary[key].Type == value.Type)
+        {
+            this.dictionary[key].Value = value.Value;
+        }
+        else
+        {
+            this.dictionary[key] = value;
+        }
+    }
+
+    public void Set<T>(string key, T value)
+    {
+        if (this.dictionary.ContainsKey(key) && this.dictionary[key].Type == typeof(T))
+        {
+            this.dictionary[key].Value = value!;
+        }
+        else
+        {
+            var refInstance = Activator.CreateInstance(typeof(Flex<>).MakeGenericType(typeof(T)), value);
+            this.dictionary[key] = (IFlex)refInstance!;
+        }
+    }
+
+    public IFlex this[string key]
+    {
+        get => !this.dictionary.TryGetValue(key, out var value) ? default! : value;
+
+        set
+        {
+            if (this.dictionary.ContainsKey(key))
+            {
+                this.dictionary[key].Value = value.Value;
+            }
+            else
+            {
+                this.dictionary[key] = value;
+            }
+
+            if (this.AutoSave)
+            {
+                this.Save();
+            }
+        }
+    }
 
     public void Save()
     {
@@ -60,25 +94,25 @@ public class Configuration
         FileInfo config = new (this.configFilePath);
         if (!config.Exists)
         {
-            this.Dictionary = new Dictionary<string, IRef>();
+            this.dictionary = new Dictionary<string, IFlex>();
             this.Save();
         }
         else
         {
             var serializedData = File.ReadAllText(this.configFilePath);
-            this.Dictionary = this.DeserializeConfig(serializedData);
+            this.dictionary = this.DeserializeConfig(serializedData);
         }
     }
 
-    internal Dictionary<string, IRef> DeserializeConfig(string serializedData)
+    internal Dictionary<string, IFlex> DeserializeConfig(string serializedData)
     {
-        return JsonConvert.DeserializeObject<Dictionary<string, IRef>>(
-                   serializedData, this.jsonSerializerSettings) ?? new Dictionary<string, IRef>();
+        return JsonConvert.DeserializeObject<Dictionary<string, IFlex>>(
+                   serializedData, this.jsonSerializerSettings) ?? new Dictionary<string, IFlex>();
     }
 
     internal string SerializeConfig()
     {
         return JsonConvert.SerializeObject(
-            this.Dictionary, Formatting.Indented, this.jsonSerializerSettings);
+            this.dictionary, Formatting.Indented, this.jsonSerializerSettings);
     }
 }
