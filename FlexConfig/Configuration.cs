@@ -67,6 +67,9 @@ public class Configuration : IConfiguration
         }
     }
 
+    /// <inheritdoc />
+    public dynamic Get(string key) => !this.dictionary.TryGetValue(key, out var value) ? default! : value.Value;
+
     /// <inheritdoc/>
     public Flex<T> Get<T>(string key) => !this.dictionary.TryGetValue(key, out var value) ? default! : (Flex<T>)value;
 

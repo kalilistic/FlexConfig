@@ -17,6 +17,13 @@ public interface IConfiguration
     IFlex this[string key] { get; set; }
 
     /// <summary>
+    /// Gets the immediate value by key.
+    /// </summary>
+    /// <param name="key">Configuration key.</param>
+    /// <returns>Existing or default constructed instance of value from dictionary.</returns>
+    dynamic Get(string key);
+
+    /// <summary>
     /// Gets an instance of <see cref="Flex{T}"/> by key.
     /// </summary>
     /// <param name="key">Configuration key.</param>
