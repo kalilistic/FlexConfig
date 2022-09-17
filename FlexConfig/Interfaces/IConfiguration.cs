@@ -47,6 +47,12 @@ public interface IConfiguration
     void Set<T>(string key, T value);
 
     /// <summary>
+    /// Removes entry from dictionary by key.
+    /// </summary>
+    /// <param name="key">Configuration key.</param>
+    void Remove(string key);
+
+    /// <summary>
     /// Serializes configuration dictionary to provided file path.
     /// </summary>
     void Save();

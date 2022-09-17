@@ -104,6 +104,9 @@ public class Configuration : IConfiguration
     }
 
     /// <inheritdoc/>
+    public void Remove(string key) => this.dictionary.Remove(key);
+
+    /// <inheritdoc/>
     public void Save()
     {
         File.WriteAllText(this.configFilePath, this.SerializeConfig());
