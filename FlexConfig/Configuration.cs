@@ -67,6 +67,14 @@ public class Configuration : IConfiguration
         }
     }
 
+    /// <summary>
+    /// Constructs <see cref="Flex{T}"/> from value.
+    /// </summary>
+    /// <param name="value">Value to be assigned.</param>
+    /// <typeparam name="T">Requested type (Can be implicit).</typeparam>
+    /// <returns>Instance of <see cref="Flex{T}"/>.</returns>
+    public static Flex<T> Create<T>(T value) => new (value);
+
     /// <inheritdoc />
     public dynamic Get(string key) => !this.dictionary.TryGetValue(key, out var value) ? default! : value.Value;
 
