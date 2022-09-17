@@ -27,7 +27,7 @@ public class Configuration : IConfiguration
     /// </summary>
     /// <param name="configFilePath">Path to config file (including name).</param>
     /// <param name="autoSave">
-    /// Whether or not automatic save should happen with every call to <see cref="Set{T}"/>.
+    /// Whether or not automatic save should happen with every call to <see cref="this[string]"/>, <see cref="Set{T}(string)"/> or <see cref="Set{T}(string, T)"/>.
     /// Default: true.
     /// </param>
     public Configuration(string configFilePath, bool autoSave = true)
