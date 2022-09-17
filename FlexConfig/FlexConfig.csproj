@@ -5,6 +5,7 @@
 		<Description>A dynamic configuration library to use with .net projects.</Description>
 		<RepositoryUrl>https://github.com/kalilistic/FlexConfig</RepositoryUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIcon>icon.png</PackageIcon>
 		<TargetFramework>net6.0-windows</TargetFramework>
 		<Platforms>x64</Platforms>
 		<LangVersion>10</LangVersion>
@@ -31,6 +32,9 @@
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\icon.png" Pack="true" PackagePath="" />
+	</ItemGroup>
 	<ItemGroup>
 		<None Remove="stylecop.json" />
 		<AdditionalFiles Include="..\stylecop.json">
