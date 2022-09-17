@@ -29,7 +29,7 @@ namespace FlexConfig.Test
             const string key = "isEnabled";
             var config = new Configuration(TestFilePath);
             config.Set(key, false);
-            config.Set(key, "updatedValue");
+            config.Set(key, "UpdatedValue");
             Assert.Throws<InvalidCastException>(() => config.Get<bool>(key).Reference);
         }
 
@@ -53,6 +53,39 @@ namespace FlexConfig.Test
             flexRef = !flexRef;
             config[key] = flex;
             Assert.True(config.Get<bool>(key));
+        }
+
+        [Fact]
+        public void RemoveShouldRemoveValue()
+        {
+            const string key = "isEnabled";
+            var config = new Configuration(TestFilePath);
+            config.Set(key, false);
+            config.Remove(key);
+            Assert.Null(config.Get<bool>(key));
+        }
+
+        [Fact]
+        public void GetImmediateShouldRetrievePrimitiveValue()
+        {
+            const string key = "isEnabled";
+            var config = new Configuration(TestFilePath);
+            config.Set(key, true);
+            var flex = config.Get(key);
+            Assert.True(flex);
+        }
+
+        [Fact]
+        public void GetImmediateShouldRetrieveUserDefinedObjectValue()
+        {
+            const string key = "myObject";
+            var obj = new UserDefinedObject
+            {
+                Name = "InitialValue",
+            };
+            var config = new Configuration(TestFilePath);
+            config.Set(key, obj);
+            Assert.Equal("InitialValue", config.Get(key).Name);
         }
 
         [Fact]
