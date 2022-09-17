@@ -24,6 +24,16 @@ namespace FlexConfig.Test
         }
 
         [Fact]
+        public void GetShouldThrowExceptionIfInvalidCast()
+        {
+            const string key = "isEnabled";
+            var config = new Configuration(TestFilePath);
+            config.Set(key, false);
+            config.Set(key, "updatedValue");
+            Assert.Throws<InvalidCastException>(() => config.Get<bool>(key).Reference);
+        }
+
+        [Fact]
         public void SaveShouldCreateFile()
         {
             var config = new Configuration(TestFilePath);
@@ -51,15 +61,45 @@ namespace FlexConfig.Test
             const string key = "myObject";
             var obj = new UserDefinedObject
             {
-                Name = "Hello!",
+                Name = "InitialValue",
             };
             var config = new Configuration(TestFilePath);
             config.Set(key, obj);
             var flex = config.Get<UserDefinedObject>(key);
             ref var flexRef = ref flex.Reference;
-            flexRef.Name = "Goodbye!";
+            flexRef.Name = "UpdatedValue";
             config[key] = flex;
-            Assert.Equal("Goodbye!", config.Get<UserDefinedObject>(key).Reference.Name);
+            Assert.Equal("UpdatedValue", config.Get<UserDefinedObject>(key).Reference.Name);
+        }
+
+        [Fact]
+        public void LoadShouldRetrievePrimitiveValueFromFile()
+        {
+            const string key = "isEnabled";
+            var config = new Configuration(TestFilePath);
+            config.Set(key, true);
+            config.Save();
+            config = new Configuration(TestFilePath);
+            config.Load();
+            Assert.True(config.Get<bool>(key).Reference);
+            File.Delete(TestFilePath);
+        }
+
+        [Fact]
+        public void LoadShouldRetrieveUserDefinedObjectValue()
+        {
+            const string key = "myObject";
+            var obj = new UserDefinedObject
+            {
+                Name = "InitialValue",
+            };
+            var config = new Configuration(TestFilePath);
+            config.Set(key, obj);
+            config.Save();
+            config = new Configuration(TestFilePath);
+            config.Load();
+            Assert.Equal("InitialValue", config.Get<UserDefinedObject>(key).Reference.Name);
+            File.Delete(TestFilePath);
         }
 
         private class UserDefinedObject
