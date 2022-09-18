@@ -135,6 +135,23 @@ namespace FlexConfig.Test
             File.Delete(TestFilePath);
         }
 
+        [Fact]
+        public void GetContainsShouldReturnTrueIfContained()
+        {
+            const string key = "isEnabled";
+            var config = new Configuration(TestFilePath);
+            config.Set(key, true);
+            Assert.True(config.ContainsKey(key));
+        }
+
+        [Fact]
+        public void GetContainsShouldReturnFalseIfNotContained()
+        {
+            const string key = "isEnabled";
+            var config = new Configuration(TestFilePath);
+            Assert.False(config.ContainsKey(key));
+        }
+
         private class UserDefinedObject
         {
             public string Name { get; set; } = null!;
