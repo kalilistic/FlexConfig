@@ -47,6 +47,13 @@ public interface IConfiguration
     void Set<T>(string key, T value);
 
     /// <summary>
+    /// Checks if key is contained in dictionary.
+    /// </summary>
+    /// <param name="key">Configuration key.</param>
+    /// <returns>True if key is contained in dictionary.</returns>
+    bool ContainsKey(string key);
+
+    /// <summary>
     /// Removes entry from dictionary by key.
     /// </summary>
     /// <param name="key">Configuration key.</param>

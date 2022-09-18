@@ -103,6 +103,9 @@ public class Configuration : IConfiguration
         }
     }
 
+    /// <inheritdoc />
+    public bool ContainsKey(string key) => this.dictionary.ContainsKey(key);
+
     /// <inheritdoc/>
     public void Remove(string key) => this.dictionary.Remove(key);
 
