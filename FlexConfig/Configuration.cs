@@ -80,14 +80,14 @@ public class Configuration : IConfiguration
 
     /// <inheritdoc />
     public dynamic Get(string key, dynamic defaultValue) =>
-        !this.dictionary.TryGetValue(key, out var value) ? defaultValue : value.Value;
+        this.dictionary.TryGetValue(key, out var value) ? value.Value : defaultValue;
 
     /// <inheritdoc/>
     public Flex<T> Get<T>(string key) => this.Get<T>(key, default!);
 
     /// <inheritdoc />
     public Flex<T> Get<T>(string key, T defaultValue) =>
-        !this.dictionary.TryGetValue(key, out var value) ? defaultValue : (Flex<T>)value;
+        this.dictionary.TryGetValue(key, out var value) ? (Flex<T>)value : defaultValue;
 
     /// <inheritdoc/>
     public void Set<T>(string key) => this.Set<T>(key, default!);
