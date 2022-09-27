@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 using Xunit;
@@ -62,7 +63,7 @@ namespace FlexConfig.Test
             var config = new Configuration(TestFilePath);
             config.Set(key, false);
             config.Remove(key);
-            Assert.Null(config.Get<bool>(key));
+            Assert.Throws<KeyNotFoundException>(() => config.Get<bool>(key));
         }
 
         [Fact]
