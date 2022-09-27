@@ -76,14 +76,20 @@ public class Configuration : IConfiguration
     public static Flex<T> Create<T>(T value) => new (value);
 
     /// <inheritdoc />
-    public dynamic Get(string key) => this.Get(key, default!);
+    /// <exception cref="KeyNotFoundException">The key does not exist in the dictionary.</exception>
+    public dynamic Get(string key) => this.dictionary.TryGetValue(key, out var value)
+                                          ? value.Value
+                                          : throw new KeyNotFoundException(key);
 
     /// <inheritdoc />
     public dynamic Get(string key, dynamic defaultValue) =>
         this.dictionary.TryGetValue(key, out var value) ? value.Value : defaultValue;
 
     /// <inheritdoc/>
-    public Flex<T> Get<T>(string key) => this.Get<T>(key, default!);
+    /// <exception cref="KeyNotFoundException">The key does not exist in the dictionary.</exception>
+    public Flex<T> Get<T>(string key) => this.dictionary.TryGetValue(key, out var value)
+                                             ? (Flex<T>)value
+                                             : throw new KeyNotFoundException(key);
 
     /// <inheritdoc />
     public Flex<T> Get<T>(string key, T defaultValue) =>
