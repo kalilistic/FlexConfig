@@ -24,12 +24,29 @@ public interface IConfiguration
     dynamic Get(string key);
 
     /// <summary>
+    /// Gets the immediate value by key.
+    /// </summary>
+    /// <param name="key">Configuration key.</param>
+    /// <param name="defaultValue">Default value.</param>
+    /// <returns>Existing or default constructed instance of value from dictionary.</returns>
+    dynamic Get(string key, dynamic defaultValue);
+
+    /// <summary>
     /// Gets an instance of <see cref="Flex{T}"/> by key.
     /// </summary>
     /// <param name="key">Configuration key.</param>
     /// <typeparam name="T">Requested type.</typeparam>
     /// <returns>Existing or default constructed instance of <see cref="Flex{T}"/> from dictionary.</returns>
     Flex<T> Get<T>(string key);
+
+    /// <summary>
+    /// Gets an instance of <see cref="Flex{T}"/> by key.
+    /// </summary>
+    /// <param name="key">Configuration key.</param>
+    /// <param name="defaultValue">Default value.</param>
+    /// <typeparam name="T">Requested type.</typeparam>
+    /// <returns>Existing or default constructed instance of <see cref="Flex{T}"/> from dictionary.</returns>
+    Flex<T> Get<T>(string key, T defaultValue);
 
     /// <summary>
     /// Sets the value in the dictionary by key to a default state.

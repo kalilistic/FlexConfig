@@ -76,10 +76,18 @@ public class Configuration : IConfiguration
     public static Flex<T> Create<T>(T value) => new (value);
 
     /// <inheritdoc />
-    public dynamic Get(string key) => !this.dictionary.TryGetValue(key, out var value) ? default! : value.Value;
+    public dynamic Get(string key) => this.Get(key, default!);
+
+    /// <inheritdoc />
+    public dynamic Get(string key, dynamic defaultValue) =>
+        !this.dictionary.TryGetValue(key, out var value) ? defaultValue : value.Value;
 
     /// <inheritdoc/>
-    public Flex<T> Get<T>(string key) => !this.dictionary.TryGetValue(key, out var value) ? default! : (Flex<T>)value;
+    public Flex<T> Get<T>(string key) => this.Get<T>(key, default!);
+
+    /// <inheritdoc />
+    public Flex<T> Get<T>(string key, T defaultValue) =>
+        !this.dictionary.TryGetValue(key, out var value) ? defaultValue : (Flex<T>)value;
 
     /// <inheritdoc/>
     public void Set<T>(string key) => this.Set<T>(key, default!);
