@@ -101,7 +101,11 @@ public class Configuration : IConfiguration
     /// <inheritdoc/>
     public void Set<T>(string key, T value)
     {
-        if (this.dictionary.ContainsKey(key) && this.dictionary[key].Type == typeof(T))
+        if (value is IFlex wrappedValue)
+        {
+            this[key] = wrappedValue;
+        }
+        else if (this.dictionary.ContainsKey(key) && this.dictionary[key].Type == typeof(T))
         {
             this.dictionary[key].Value = value!;
         }
