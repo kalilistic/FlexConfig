@@ -16,8 +16,6 @@ public class Configuration : IConfiguration
 
     private readonly JsonSerializerSettings jsonSerializerSettings = new ()
     {
-        TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
-        TypeNameHandling = TypeNameHandling.Objects,
         Converters = new List<JsonConverter> { new IFlexJsonConverter() },
     };
 

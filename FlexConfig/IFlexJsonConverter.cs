@@ -20,7 +20,14 @@ public class IFlexJsonConverter : JsonConverter<IFlex>
         var obj = new JObject
         {
             ["Type"] = JToken.FromObject($"{value.Type.FullName}, {value.Type.Assembly.GetName().Name}", serializer),
-            ["Value"] = JToken.FromObject(value.Value, serializer),
+            ["Value"] = JToken.FromObject(
+                value.Value,
+                JsonSerializer.Create(
+                    new JsonSerializerSettings
+                    {
+                        TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
+                        TypeNameHandling = TypeNameHandling.Objects,
+                    })),
         };
 
         obj.WriteTo(writer);
