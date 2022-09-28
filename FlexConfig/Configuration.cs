@@ -18,6 +18,7 @@ public class Configuration : IConfiguration
     {
         TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
         TypeNameHandling = TypeNameHandling.Objects,
+        Converters = new List<JsonConverter> { new IFlexJsonConverter() },
     };
 
     private Dictionary<string, IFlex> dictionary = new ();
