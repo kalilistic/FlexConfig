@@ -57,7 +57,7 @@ public class IFlexJsonConverter : JsonConverter<IFlex>
 
         if (valueType == null)
         {
-            throw new NullReferenceException($"{valueType}");
+            return null;
         }
 
         var value = jObject["Value"] !.ToObject(valueType);
