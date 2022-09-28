@@ -117,7 +117,6 @@ namespace FlexConfig.Test
             var config = new Configuration(TestFilePath);
             var flexIn = Configuration.Create(obj);
             config.Set(key, flexIn);
-            var flexOut = config.Get<UserDefinedObject>(key);
             Assert.Equal("InitialValue", config.Get<UserDefinedObject>(key).Reference.Name);
         }
 
