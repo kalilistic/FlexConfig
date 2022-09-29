@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 namespace FlexConfig;
 
 /// <inheritdoc />
-public class IFlexJsonConverter : JsonConverter<IFlex>
+public class FlexJsonConverter : JsonConverter<IFlex>
 {
     /// <inheritdoc />
     public override void WriteJson(JsonWriter writer, IFlex? value, JsonSerializer serializer)

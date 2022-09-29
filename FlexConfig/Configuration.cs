@@ -16,7 +16,7 @@ public class Configuration : IConfiguration
 
     private readonly JsonSerializerSettings jsonSerializerSettings = new ()
     {
-        Converters = new List<JsonConverter> { new IFlexJsonConverter() },
+        Converters = new List<JsonConverter> { new FlexJsonConverter() },
     };
 
     private Dictionary<string, IFlex> dictionary = new ();
