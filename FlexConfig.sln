@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlexConfig", "FlexConfig\Fl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlexConfig.Test", "FlexConfig.Test\FlexConfig.Test.csproj", "{48CF939B-8B14-49D7-87CC-ECF51D08C07B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAssembly", "TestAssembly\TestAssembly.csproj", "{6BD72755-E287-45B6-8203-2F427F9AF06F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,5 +24,9 @@ Global
 		{48CF939B-8B14-49D7-87CC-ECF51D08C07B}.Debug|Any CPU.Build.0 = Debug|x64
 		{48CF939B-8B14-49D7-87CC-ECF51D08C07B}.Release|Any CPU.ActiveCfg = Release|x64
 		{48CF939B-8B14-49D7-87CC-ECF51D08C07B}.Release|Any CPU.Build.0 = Release|x64
+		{6BD72755-E287-45B6-8203-2F427F9AF06F}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{6BD72755-E287-45B6-8203-2F427F9AF06F}.Debug|Any CPU.Build.0 = Debug|x64
+		{6BD72755-E287-45B6-8203-2F427F9AF06F}.Release|Any CPU.ActiveCfg = Release|x64
+		{6BD72755-E287-45B6-8203-2F427F9AF06F}.Release|Any CPU.Build.0 = Release|x64
 	EndGlobalSection
 EndGlobal
