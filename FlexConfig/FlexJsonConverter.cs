@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 
 using FlexConfig.Interfaces;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace FlexConfig;
 
@@ -10,59 +11,65 @@ namespace FlexConfig;
 public class FlexJsonConverter : JsonConverter<IFlex>
 {
     /// <inheritdoc />
-    public override void WriteJson(JsonWriter writer, IFlex? value, JsonSerializer serializer)
+    public override bool CanConvert(Type typeToConvert)
     {
-        if (value == null)
-        {
-            return;
-        }
-
-        var obj = new JObject
-        {
-            ["Type"] = JToken.FromObject($"{value.Type.FullName}, {value.Type.Assembly.GetName().Name}", serializer),
-            ["Value"] = JToken.FromObject(
-                value.Value,
-                JsonSerializer.Create(
-                    new JsonSerializerSettings
-                    {
-                        TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
-                        TypeNameHandling = TypeNameHandling.Objects,
-                    })),
-        };
-
-        obj.WriteTo(writer);
+        return typeof(IFlex).IsAssignableFrom(typeToConvert);
     }
 
     /// <inheritdoc />
-    public override IFlex? ReadJson(JsonReader reader, Type objectType, IFlex? existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override IFlex? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        if (reader.TokenType == JsonToken.Null)
+        if (reader.TokenType == JsonTokenType.Null)
         {
             return null;
         }
 
-        var jObject = JObject.Load(reader);
+        var jsonNode = JsonNode.Parse(ref reader);
 
-        if (!jObject.ContainsKey("Type"))
+        if (jsonNode == null)
         {
-            throw new JsonReaderException("Type");
+            throw new JsonException("JsonNode");
         }
 
-        if (!jObject.ContainsKey("Value"))
+        if (jsonNode["Type"] == null)
         {
-            throw new JsonReaderException("Value");
+            throw new JsonException("Type");
         }
 
-        var valueType = Type.GetType(jObject["Type"] !.ToString());
+        if (jsonNode["Value"] == null)
+        {
+            throw new JsonException("Value");
+        }
+
+        var valueType = Type.GetType(jsonNode["Type"] !.ToString());
 
         if (valueType == null)
         {
             return null;
         }
 
-        var value = jObject["Value"] !.ToObject(valueType);
+        var value = jsonNode["Value"].Deserialize(valueType, options);
         var ret = Activator.CreateInstance(typeof(Flex<>).MakeGenericType(valueType), value);
 
         return (IFlex?)ret;
+    }
+
+    /// <inheritdoc />
+    public override void Write(Utf8JsonWriter writer, IFlex? value, JsonSerializerOptions options)
+    {
+        if (value == null)
+        {
+            return;
+        }
+
+        JsonNode obj = new JsonObject();
+
+        obj["Type"] = JsonSerializer.SerializeToNode(
+            $"{value.Type.FullName}, {value.Type.Assembly.GetName().Name}",
+            typeof(string),
+            options);
+        obj["Value"] = JsonSerializer.SerializeToNode(value.Value, value.Type, options);
+
+        obj.WriteTo(writer);
     }
 }
