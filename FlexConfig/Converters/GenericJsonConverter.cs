@@ -33,12 +33,12 @@ public class GenericJsonConverter : JsonConverter<object>
             throw new JsonException("JsonNode");
         }
 
-        if (jsonNode["$type$"] == null)
+        if (jsonNode["$type"] == null)
         {
             throw new JsonException("Type");
         }
 
-        var valueType = Type.GetType(jsonNode["$type$"] !.ToString());
+        var valueType = Type.GetType(jsonNode["$type"] !.ToString());
 
         if (valueType == null)
         {
@@ -81,7 +81,7 @@ public class GenericJsonConverter : JsonConverter<object>
             return;
         }
 
-        obj["$type$"] = JsonSerializer.SerializeToNode(
+        obj["$type"] = JsonSerializer.SerializeToNode(
             $"{type.FullName}, {type.Assembly.GetName().Name}",
             typeof(string),
             options);
