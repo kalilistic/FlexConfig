@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
-namespace FlexConfig;
+namespace FlexConfig.Converters;
 
 /// <inheritdoc />
 public class GenericJsonConverter : JsonConverter<object>

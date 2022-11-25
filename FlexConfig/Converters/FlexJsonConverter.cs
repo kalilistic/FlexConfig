@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 using FlexConfig.Interfaces;
 
-namespace FlexConfig;
+namespace FlexConfig.Converters;
 
 /// <inheritdoc />
 public class FlexJsonConverter : JsonConverter<IFlex>
