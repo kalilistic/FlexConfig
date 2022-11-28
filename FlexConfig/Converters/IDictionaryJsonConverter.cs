@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -56,10 +57,13 @@ public class IDictionaryJsonConverter : JsonConverter<IDictionary?>
 
                 if (valueType == null)
                 {
-                    return null;
+                    throw new JsonException($"Type {valueType} does not exist.");
                 }
 
-                result = (IDictionary?)Activator.CreateInstance(valueType);
+                result = (IDictionary?)Activator.CreateInstance(
+                    typeof(Dictionary<,>).MakeGenericType(
+                        valueType.GenericTypeArguments[0],
+                        valueType.GenericTypeArguments[1]));
                 continue;
             }
 
@@ -70,6 +74,11 @@ public class IDictionaryJsonConverter : JsonConverter<IDictionary?>
             var value = JsonSerializer.Deserialize(ref reader, valueType?.GenericTypeArguments[1] !, options);
 
             result.Add(key!, value);
+        }
+
+        if (valueType != null)
+        {
+            result = (IDictionary?)Activator.CreateInstance(valueType, result);
         }
 
         return result;
