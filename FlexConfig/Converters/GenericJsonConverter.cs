@@ -73,7 +73,6 @@ public class GenericJsonConverter : JsonConverter<object>
     /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, object? value, JsonSerializerOptions options)
     {
-        JsonNode obj = new JsonObject();
         var type = value?.GetType();
 
         if (type == null)
@@ -81,24 +80,35 @@ public class GenericJsonConverter : JsonConverter<object>
             return;
         }
 
-        obj["$type"] = JsonSerializer.SerializeToNode(
-            $"{type.FullName}, {type.Assembly.GetName().Name}",
-            typeof(string),
-            options);
+        writer.WriteStartObject();
+        writer.WriteString("$type", $"{type.FullName}, {type.Assembly.GetName().Name}");
 
-        if (value != null)
+        if (value == null)
         {
-            foreach (var field in type.GetFields())
-            {
-                obj[field.Name] = JsonSerializer.SerializeToNode(field.GetValue(value), field.FieldType, options);
-            }
-
-            foreach (var property in type.GetProperties())
-            {
-                obj[property.Name] = JsonSerializer.SerializeToNode(property.GetValue(value), property.PropertyType, options);
-            }
+            writer.WriteNullValue();
         }
+        else
+        {
+            if (typeof(ICollection).IsAssignableFrom(type))
+            {
+                JsonSerializer.Serialize(writer, value, type, options);
+            }
+            else
+            {
+                foreach (var field in type.GetFields())
+                {
+                    writer.WritePropertyName(field.Name);
+                    JsonSerializer.Serialize(writer, field.GetValue(value), field.FieldType, options);
+                }
 
-        obj.WriteTo(writer);
+                foreach (var property in type.GetProperties())
+                {
+                    writer.WritePropertyName(property.Name);
+                    JsonSerializer.Serialize(writer, property.GetValue(value), property.PropertyType, options);
+                }
+            }
+
+            writer.WriteEndObject();
+        }
     }
 }

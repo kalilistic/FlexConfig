@@ -62,14 +62,10 @@ public class FlexJsonConverter : JsonConverter<IFlex>
             return;
         }
 
-        JsonNode obj = new JsonObject();
-
-        obj["Type"] = JsonSerializer.SerializeToNode(
-            $"{value.Type.FullName}, {value.Type.Assembly.GetName().Name}",
-            typeof(string),
-            options);
-        obj["Value"] = JsonSerializer.SerializeToNode(value.Value, value.Type, options);
-
-        obj.WriteTo(writer);
+        writer.WriteStartObject();
+        writer.WriteString("Type", $"{value.Type.FullName}, {value.Type.Assembly.GetName().Name}");
+        writer.WritePropertyName("Value");
+        JsonSerializer.Serialize(writer, value.Value, value.Type, options);
+        writer.WriteEndObject();
     }
 }
