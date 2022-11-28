@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -8,14 +7,12 @@ using System.Text.Json.Serialization;
 namespace FlexConfig.Converters;
 
 /// <inheritdoc />
-public class GenericJsonConverter : JsonConverter<object>
+public class GenericJsonConverter : JsonConverter<object?>
 {
     /// <inheritdoc />
     public override bool CanConvert(Type typeToConvert)
     {
-        return !typeToConvert.IsPrimitive && typeToConvert != typeof(string) &&
-               !typeof(IDictionary).IsAssignableFrom(typeToConvert) && !typeof(IList).IsAssignableFrom(typeToConvert) &&
-               !typeof(ISet<>).IsAssignableFrom(typeToConvert);
+        return !typeToConvert.IsPrimitive && typeToConvert != typeof(string) && !typeof(ICollection).IsAssignableFrom(typeToConvert);
     }
 
     /// <inheritdoc />

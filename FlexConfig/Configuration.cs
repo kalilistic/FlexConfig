@@ -43,6 +43,7 @@ public class Configuration : IConfiguration
         // Set up converters
         this.jsonSerializerSettings.Converters.Add(new FlexJsonConverter());
         this.jsonSerializerSettings.Converters.Add(new GenericJsonConverter());
+        this.jsonSerializerSettings.Converters.Add(new IDictionaryJsonConverter());
     }
 
     /// <inheritdoc/>
