@@ -67,6 +67,19 @@ namespace FlexConfig.Test
         }
 
         [Fact]
+        public void RemoveAllShouldRemoveAllValues()
+        {
+            const string key1 = "isEnabled1";
+            const string key2 = "isEnabled2";
+            var config = new Configuration(TestFilePath);
+            config.Set(key1, false);
+            config.Set(key2, false);
+            config.RemoveAll();
+            Assert.Throws<KeyNotFoundException>(() => config.Get<bool>(key1));
+            Assert.Throws<KeyNotFoundException>(() => config.Get<bool>(key2));
+        }
+
+        [Fact]
         public void GetImmediateShouldRetrievePrimitiveValue()
         {
             const string key = "isEnabled";

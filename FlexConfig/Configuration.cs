@@ -124,7 +124,24 @@ public class Configuration : IConfiguration
     public bool ContainsKey(string key) => this.dictionary.ContainsKey(key);
 
     /// <inheritdoc/>
-    public void Remove(string key) => this.dictionary.Remove(key);
+    public void Remove(string key)
+    {
+        this.dictionary.Remove(key);
+        if (this.AutoSave)
+        {
+            this.Save();
+        }
+    }
+
+    /// <inheritdoc/>
+    public void RemoveAll()
+    {
+        this.dictionary.Clear();
+        if (this.AutoSave)
+        {
+            this.Save();
+        }
+    }
 
     /// <inheritdoc/>
     public void Save()

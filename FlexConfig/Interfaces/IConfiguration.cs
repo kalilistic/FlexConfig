@@ -77,6 +77,11 @@ public interface IConfiguration
     void Remove(string key);
 
     /// <summary>
+    /// Removes all entries from dictionary.
+    /// </summary>
+    void RemoveAll();
+
+    /// <summary>
     /// Serializes configuration dictionary to provided file path.
     /// </summary>
     void Save();
