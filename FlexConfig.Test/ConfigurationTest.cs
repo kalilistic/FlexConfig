@@ -180,6 +180,25 @@ namespace FlexConfig.Test
             Assert.False(config.ContainsKey(key));
         }
 
+        [Fact]
+        public void SetIfNewShouldSetIfNew()
+        {
+            const string key = "isEnabled";
+            var config = new Configuration(TestFilePath);
+            Assert.False(config.SetIfNew(key, true));
+            Assert.True(config.Get(key));
+        }
+
+        [Fact]
+        public void SetIfNewShouldNotSetIfOld()
+        {
+            const string key = "isEnabled";
+            var config = new Configuration(TestFilePath);
+            config.SetIfNew(key, true);
+            Assert.True(config.SetIfNew(key, false));
+            Assert.True(config.Get(key));
+        }
+
         private class UserDefinedObject
         {
             public string Name { get; set; } = null!;

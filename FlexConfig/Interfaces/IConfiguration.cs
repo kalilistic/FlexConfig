@@ -64,6 +64,15 @@ public interface IConfiguration
     void Set<T>(string key, T value);
 
     /// <summary>
+    /// Sets the value in the dictionary by key if doesn't exist.
+    /// </summary>
+    /// <param name="key">Configuration key.</param>
+    /// <param name="value">Value to be stored.</param>
+    /// <typeparam name="T">Requested type (Can be implicit).</typeparam>
+    /// <returns>True if key is already contained in dictionary.</returns>
+    bool SetIfNew<T>(string key, T value);
+
+    /// <summary>
     /// Checks if key is contained in dictionary.
     /// </summary>
     /// <param name="key">Configuration key.</param>

@@ -120,6 +120,18 @@ public class Configuration : IConfiguration
         }
     }
 
+    /// <inheritdoc/>
+    public bool SetIfNew<T>(string key, T value)
+    {
+        if (this.ContainsKey(key))
+        {
+            return true;
+        }
+
+        this.Set<T>(key, value);
+        return false;
+    }
+
     /// <inheritdoc />
     public bool ContainsKey(string key) => this.dictionary.ContainsKey(key);
 
