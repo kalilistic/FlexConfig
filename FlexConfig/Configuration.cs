@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 
 using FlexConfig.Interfaces;
-using Newtonsoft.Json;
 
 namespace FlexConfig;
 
@@ -14,9 +14,9 @@ public class Configuration : IConfiguration
 {
     private readonly string configFilePath;
 
-    private readonly JsonSerializerSettings jsonSerializerSettings = new ()
+    private readonly JsonSerializerOptions jsonSerializerSettings = new ()
     {
-        Converters = new List<JsonConverter> { new FlexJsonConverter() },
+        WriteIndented = true,
     };
 
     private Dictionary<string, IFlex> dictionary = new ();
@@ -38,6 +38,9 @@ public class Configuration : IConfiguration
 
         this.AutoSave = autoSave;
         this.configFilePath = configFilePath;
+
+        // Set up converters
+        this.jsonSerializerSettings.Converters.Add(new FlexJsonConverter());
     }
 
     /// <inheritdoc/>
@@ -184,8 +187,8 @@ public class Configuration : IConfiguration
     /// <returns>Instance of configuration dictionary.</returns>
     internal Dictionary<string, IFlex> DeserializeConfig(string serializedData)
     {
-        return JsonConvert.DeserializeObject<Dictionary<string, IFlex>>(
-                   serializedData, this.jsonSerializerSettings) ?? new Dictionary<string, IFlex>();
+        return JsonSerializer.Deserialize<Dictionary<string, IFlex>>(serializedData, this.jsonSerializerSettings) ??
+               new Dictionary<string, IFlex>();
     }
 
     /// <summary>
@@ -194,7 +197,6 @@ public class Configuration : IConfiguration
     /// <returns>JSON string.</returns>
     internal string SerializeConfig()
     {
-        return JsonConvert.SerializeObject(
-            this.dictionary, Formatting.Indented, this.jsonSerializerSettings);
+        return JsonSerializer.Serialize(this.dictionary, this.jsonSerializerSettings);
     }
 }

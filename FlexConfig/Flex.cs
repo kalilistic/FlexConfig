@@ -3,9 +3,9 @@
 // </copyright>
 
 using System;
+using System.Text.Json.Serialization;
 
 using FlexConfig.Interfaces;
-using Newtonsoft.Json;
 
 namespace FlexConfig;
 
