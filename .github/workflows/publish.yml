@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-- name: Setup .net
+    - name: Setup .net
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.103
